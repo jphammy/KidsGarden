@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+  
+  <style>
+body {
+  margin: 0;
+}
+/* Navigation bars code was from https://www.w3schools.com/css/css_navbar.asp */
+/* CSS for the leftside navigation bar */
+ul.dnLst {
+  list-style-type: none;
+  text-align: center;
+  margin-top: 110px;
+  padding: 0;
+  width: 150px;
+  background-color: #ccffcc;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+li.dnWd a.dnA {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+/* CSS used for the bottom section */ 
+ul.lftLst {
+  list-style-type: none;
+  text-align: center;
+  height: 110px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  background-color: #008000;
+  overflow: auto;
+}
+li.rtWd a.rtA {
+  display:block;
+  color: white;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 40px;
+  padding-right: 25px;
+  padding-left: 25px;
+  text-decoration: none;
+}
+li.lftWd a.lftA {
+  display: block;
+  color: white;
+  text-align: center;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-decoration: none;
+}
+li a.active {
+  background-color: #003300;
+  color: white;
+}
+li a:hover:not(.active) {
+  background-color: #003300;
+  color: white;
+}
+/* CSS used for the top navagation bar and the drop contributers section */
+ul.drp {
+list-style-type: none;
+text-align: center;
+height: 110px;
+margin: 0;
+padding: 0;
+width: 100%;
+position: fixed;
+overflow: visible;
+background-color: #008000;
+}
+li.drp {
+display: block;
+float: left;
+color: #000;
+padding: 0px;
+text-decoration: none;
+}
+li a, .dropbtn {
+display: inline-block;
+color: #ccffcc;
+text-align: center;
+padding: 20px 20px;
+text-decoration: none;
+}
+li a:hover, .dropdown:hover .dropbtn {
+color:#ccffcc;
+background-color: #003300;
+}
+.dropdown-content {
+display: none;
+position: absolute;
+color:#ccffcc;
+background-color: #003300;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+.dropdown-content a {
+color: #ccffcc;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+text-align: left;
+}
+.dropdown-content a:hover {background-color: #b3ffb3;}
+.dropdown:hover .dropdown-content {
+display: block;
+color: #b3ffb3;
+}
+li.dropdown {
+display: inline-block;
+}
+  </style>
+  <title>BotNet Input Page</title>
+
+  
+<!-- Image located at http://www.clipartable.com/images/12/Ny0Xhhgt.png -->
+  
+  <link rel="icon" href="http://www.clipartable.com/images/12/Ny0Xhhgt.png" type="image/png">
+
+  
+  <script>
+//Checks if the input is either entered or not a number
+function ckinput(){
+    var height, light, moist, temp, hum;
+    height = document.getElementById("ht");
+    light = document.getElementById("lt");
+    moist = document.getElementById("mt");
+    temp = document.getElementById("tmp");
+    hum = document.getElementById("hm");
+    if(isNaN(height.value) || isNaN(light.value) || isNaN(moist.value) || isNaN(temp.value) || isNaN(hum.value))
+    {
+	alert("Error: The input you have given is not a number.");
+    }
+    else if(height.value == "" || light.value == "" || moist.value == "" || temp.value == "" || hum.value == "")
+    {
+	alert("Error: One of the fields is not filled out");
+    }
+    else
+    {
+	alert("Height: " + height.value + "\nLight: " + light.value + "\nMoisture: " + moist.value + "\nTempurature: " + temp.value + "\nHumidity: " + hum.value);
+    }  
+}
+  </script>
+</head><body>
+<!-- Top Navigation Bar -->
+<ul class="drp">
+
+<!-- BotNet Image -->
+  <li class="drp"><a style="padding: 6px 25px 0px;" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Homepage.html"><img style="height: 100px;" src="https://cdn.discordapp.com/attachments/557289109245132825/563077821900259386/BotNet_Logo_3.png" alt="BotNet Logo"></a></li>
+<!-- BotNet Title -->
+  <li class="drp" style="margin-left: 30px; margin-top: 20px; color: rgb(204, 255, 204);">
+    <h1> BotNet | Networking in Botany </h1>
+  </li>
+<!-- Contributers Dropdown Pane -->
+  <li class="dropdown" style="padding: 40px 0px 0px; float: right;"> <a href="javascript:void(0)" class="dropbtn">Contributors</a>
+    <div class="dropdown-content"> <a href="MS">Michael Sago</a> <a href="CA">Cole Alves</a> <a href="JP">Jonathan Pham</a> <a href="PK">Philip
+Keroff</a> <a href="TV">Tarun Vittal</a></div>
+  </li>
+</ul>
+
+<!-- Left Navigation Bar -->
+<ul class="dnLst">
+
+<!-- Link to the input page -->
+  <li class="dnWd"><a class="dnA" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Input.html">Input</a></li>
+<!-- Link to thingspeak -->
+  <li class="dnWd"><a class="dnA" href="https://thingspeak.com/login">See
+Graphs</a></li>
+<!-- Link to the BotNet Manuals -->
+  <li class="dnWd"><a class="dnA" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Manuals.html">Manuals</a></li>
+</ul>
+
+<!-- Main Body of the WebPage -->
+<div style="padding: 120px 16px; margin-left: 150px; height: 240px;">
+<h2 style="font-size: 25px;"> Welcome to your group's database input
+page.</h2>
+<p style="font-size: 16px;">
+This page allows you to enter the height you measured, along with the
+data you collected from <br>
+your computer into your plant database. The input for this page must be
+a full number or a decimal. <br>
+Anything else will return an error. <br>
+</p>
+<!-- Form for the input of data -->
+<form id="htFrm" action=""> <br>
+  <table style="font-size: 16px;">
+    <tbody>
+      <tr>
+<!-- Height --> <td>Please enter the height of the plant: </td>
+        <td> <input id="ht" name="Height" value="0" type="text"> </td>
+      </tr>
+      <tr>
+<!-- Light Level --> <td>Please enter the light level: </td>
+        <td> <input id="lt" name="Light" value="0" type="text"> </td>
+      </tr>
+      <tr>
+<!-- Moisture Level --> <td>Please enter the moisture level of the
+soil: </td>
+        <td> <input id="mt" name="Moisture" value="0" type="text"> </td>
+      </tr>
+      <tr>
+<!-- Temperature Level --> <td>Please enter the temperature: </td>
+        <td> <input id="tmp" name="Temperature" value="0" type="text">
+        </td>
+      </tr>
+      <tr>
+<!-- Humidity level --> <td>Please enter the humidity: </td>
+        <td> <input id="hm" name="Humidity" value="0" type="text"> </td>
+      </tr>
+      <tr>
+<!-- Input and Reset buttons --> <td> <button onclick="ckinput()">Upload
+Data</button> <input value="Reset" onclick="selHand()" type="reset"> </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<!-- Bottom Section -->
+<ul class="lftLst" style="position: relative; background-color: rgb(204, 255, 204);">
+
+  <li class="lftWd" style="float: left;">
+    <p style="padding-left: 30px; padding-top: 10px; color: black; text-align: left;">This
+page was last
+modified on: April 2019 <br>
+Page Owner: Philip Keroff<br>
+© BotNet Inc. All rights Reserved. </p>
+  </li>
+</ul>
+
+</body></html>
