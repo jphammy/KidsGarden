@@ -1,0 +1,24 @@
+BotNet User Manual
+
+Plants beautify our environment and purify the air we breath, improving quality of life. 
+But we often forget to take care of it due to our busy lives.The BotNet Smart Flower Pot will 
+allow the user to communicate with plants. The device will collect the soil moisture of the plant,
+light intensity, temperature and humidity data via advanced sensors. In turn the data is immediately
+displayed on the LCD display. Data is uploaded to network via the wireless communication module, where
+one can observe it online anytime and anywhere. The unit will alarm the user when the plant requires watering.
+
+This is an introductory, easy to build ESP8266 based environmental plant monitoring system using advanced sensors
+to monitor the soil moisture, monitor the sunlight,  and watch temperature and humidity.  It is designed to be easily 
+and simply put together and tested with no soldering required.
+
+Link to YouTube Video on How to Setup Device and Sensors
+https://www.youtube.com/watch?v=wz63vcp_j04&t=7s
+
+Link to Programmer's Manual
+https://docs.google.com/document/d/1KCcdF4ApIQvri-XnzOtqV_xRCQRB07xt2WbwsR-cwG8/edit
+
+Link to User Manual
+https://docs.google.com/document/d/1wZS7dkNUTZpMoaEuBc-cuxxcx33hffMBFxrxAz75YFc/edit
+
+Link to the PPT Presentation:
+https://docs.google.com/presentation/d/1LN8iavHSd0eJEMycSUkOvlgpvMDqZ5HVDVxgcgZTMj4/edit 
