@@ -1,0 +1,284 @@
+﻿/**
+ * lightsensor link ESP8266:    VCC - 3.3v    GND - GND    SCL - D1    SDA - D2  
+ * 1602 LCD link ESP8266:    VCC - 5V    GND - GND    SCL - D1    SDA - D2 
+ * DHT11 link ESP8266:    VCC - 3.3V    GND - GND    OUT - D4
+ * BH1750FVI link ESP8266:    VCC - 3.3V    GND - GND    DO-D7    AO-AO
+ 
+ * Note:
+ * You should modify the wifi account: WIFI_SSID   WIFI_PWD
+ * Update ThingSpeak API: WIFI_PWD below first
+*/
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <time.h>                       // time() ctime()
+#include <sys/time.h>                   // struct timeval
+#include <ESP8266WiFi.h>
+#include "ThingSpeak.h"
+
+
+//BH1750FVI Setting
+#define ADDR_LightSensor 0b0100011  // in ADDR_LightSensor 'L' mode 7bit addr
+//1602 Setting
+#define ADDR_1602LCD 0b0100111  // in ADDR_1602LCD 'L' mode 7bit addr
+LiquidCrystal_I2C lcd(0x27,16,2); // set the LCD address to 0x27 for a 20 chars and 4 line display
+//SoliMoisturesensor Setting
+#define Moisture A0  //Define the AO pin as A0
+#define DO 13         //ESP8266 D7 Port
+#define LED 15       // ESP8266 D8 Port
+//DHT11 Setting
+#define DHT11PIN 2    // ESP8266 D4 Port
+
+//WIFI Setting
+const char* WIFI_SSID = "SSID";
+const char* WIFI_PWD = "Password";
+WiFiClient client;
+//Thingspeak.com Setting
+const char *host = "api.thingspeak.com";                  //IP address of the thingspeak server
+const char *api_key ="P0KSG2YRHUEPY0C1";                  //Your own thingspeak api_key
+const int httpPort = 80;
+
+void checkWiFIConnection();
+void uploadDataToWeb();
+void readLight();
+void showOnLCD1602();
+void readDHT11();
+void readSoilMoisture();
+
+int tempLight = 0;  //Temporary light variable
+int tempHum = 0;  //Temporary humidity variable
+int tempTemp = 0;  //Temporary temperature variable
+int tempSoilMoistur = 0;  //Temporary SoilMoistur variable
+
+long readTime = 0; 
+long uploadTime = 0; 
+
+void setup(){
+  Serial.begin(115200);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+  //wifi connect
+  WiFi.disconnect();
+  WiFi.begin(WIFI_SSID, WIFI_PWD);
+  checkWiFiConnection(); 
+  //begin lightsensor and 1602 LCD
+  Wire.begin();
+  Wire.beginTransmission(ADDR_LightSensor);
+  Wire.write(0b00000001);
+  Wire.endTransmission();
+  //begin SoilMoisture
+  pinMode(Moisture, INPUT);//Define A0 as the input mode
+  pinMode(DO, INPUT);
+  pinMode(LED, OUTPUT);
+  //begin DHT11
+  pinMode(DHT11PIN,OUTPUT);
+
+  readLight();
+  readSoilMoisture();
+  readDHT11();
+  showOnLCD1602();
+}
+
+void loop(){
+  //Read Data every 5 seconds
+  if(millis() - readTime > 5000){
+    readLight();
+    readSoilMoisture();
+    readDHT11();
+    showOnLCD1602();
+    readTime = millis();
+    Serial.println("----------------------");
+  }
+
+  //Upload Data every 60 seconds
+  if(millis() - uploadTime > 60000){
+    uploadDataToWeb();
+    uploadTime = millis();
+  }
+}
+
+void uploadDataToWeb(){
+  if(!client.connect(host, httpPort)){
+    Serial.println("connection failed");
+    return;
+  }
+  // Three values(field1 field2 field3 field4) have been set in thingspeak.com 
+  client.print(String("GET ") + "/update?api_key="+api_key+"&field1="+tempSoilMoistur+"&field2="+tempTemp+"&field3="+tempLight+"&field4="+tempHum+" HTTP/1.1\r\n" +"Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
+}
+
+void showOnLCD1602(){
+  Wire.beginTransmission(ADDR_1602LCD);
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  
+  String line1 = "sm:";
+  line1 += tempSoilMoistur;
+  line1 += " tem:";
+  line1 += tempTemp;
+
+  String line2 = "li:";
+  line2 += tempLight;
+  line2 += " hum:";
+  line2 += tempHum;
+  
+  lcd.print(line1);
+  lcd.setCursor(0,1);
+  lcd.print(line2);
+  Wire.endTransmission();
+}
+
+void readDHT11(){
+  int j;
+  unsigned int loopCnt;
+  int chr[40] = {0};
+  unsigned long time1;
+bgn:
+  pinMode(DHT11PIN, OUTPUT);
+  digitalWrite(DHT11PIN, LOW);
+  delay(20);
+  digitalWrite(DHT11PIN, HIGH);
+  delayMicroseconds(40);
+  digitalWrite(DHT11PIN, LOW);
+  //Set interface mode 2: input
+  pinMode(DHT11PIN, INPUT);
+  //High level response signal
+  loopCnt = 10000;
+  while (digitalRead(DHT11PIN) != HIGH){
+    if (loopCnt-- == 0){
+      //If don't return to high level for a long time, output a prompt and start over
+      Serial.println("HIGH");
+      goto bgn;
+    }
+  }
+  //Low level response signal
+  loopCnt = 30000;
+  while (digitalRead(DHT11PIN) != LOW){
+    if (loopCnt-- == 0){
+      //If don't return low for a long time, output a prompt and start over
+      Serial.println("LOW");
+      goto bgn;
+    }
+  }
+  //Start reading the value of bit1-40
+  for (int i = 0; i < 40; i++){
+    while (digitalRead(DHT11PIN) == LOW){}
+    //When the high level occurs, write down the time "time"
+    time1 = micros();
+    while (digitalRead(DHT11PIN) == HIGH){}
+    //When there is a low level, write down the time and subtract the time just saved
+    //If the value obtained is greater than 50μs, it is ‘1’, otherwise it is ‘0’
+    //And save it in an array
+    if (micros() - time1  > 50){
+      chr[i] = 1;
+    } else {
+      chr[i] = 0;
+    }
+  }
+
+  //Humidity, 8-bit bit, converted to a value
+  tempHum= chr[0] * 128 + chr[1] * 64 + chr[2] * 32 + chr[3] * 16 + chr[4] * 8 + chr[5] * 4 + chr[6] * 2 + chr[7];
+  //Temperature, 8-bit bit, converted to a value
+  tempTemp = chr[16] * 128 + chr[17] * 64 + chr[18] * 32 + chr[19] * 16 + chr[20] * 8 + chr[21] * 4 + chr[22] * 2 + chr[23];
+  Serial.print("Humidity: ");
+  Serial.println(tempHum);
+  Serial.print("Temperature: ");
+  Serial.println(tempTemp);
+}
+
+void readLight(){
+   // reset
+  Wire.beginTransmission(ADDR_LightSensor);
+  Wire.write(0b00000111);
+  Wire.endTransmission();
+ 
+  Wire.beginTransmission(ADDR_LightSensor);
+  Wire.write(0b00100000);
+  Wire.endTransmission();
+  // typical read delay 120ms
+  delay(120);
+  Wire.requestFrom(ADDR_LightSensor, 2); // 2byte every time
+  for (tempLight = 0; Wire.available() >= 1; ) {
+    char c = Wire.read();
+    //Serial.println(c, HEX);
+    tempLight = (tempLight << 8) + (c & 0xFF);
+  }
+  tempLight = tempLight / 1.2;
+  Serial.print("light: ");
+  Serial.println(tempLight);
+}
+
+void readSoilMoisture(){
+  //Serial port returns measurement data
+  tempSoilMoistur = analogRead(Moisture);
+  Serial.print("Moisture=");
+  Serial.print(tempSoilMoistur);//read AO data
+  Serial.print("|DO=");
+  Serial.println(digitalRead(DO));//read DO data
+  if(digitalRead(DO) == 1 ){
+     digitalWrite(LED, HIGH);   // light LED
+  }else{
+      digitalWrite(LED, LOW);  
+  }
+}
+void checkWiFiConnection(){
+  
+  // Print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // Print your device IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // Print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
+}
+
+/*
+// Updates the ThingSpeakchannel with data
+void httpRequest(char* jsonBuffer) {
+  /* JSON format for data buffer in the API
+   *  This examples uses the relative timestamp as it uses the "delta_t". You can also provide the absolute timestamp using the "created_at" parameter
+   *  instead of "delta_t".
+   *   "{\"write_api_key\":\"YOUR-CHANNEL-WRITEAPIKEY\",\"updates\":[{\"delta_t\":0,\"field1\":-60},{\"delta_t\":15,\"field1\":200},{\"delta_t\":15,\"field1\":-66}]
+   *//*
+  // Format the data buffer as noted above
+  char data[500] = "{\"write_api_key\":\"YOUR-CHANNEL-WRITEAPIKEY\",\"updates\":"; // Replace YOUR-CHANNEL-WRITEAPIKEY with your ThingSpeak channel write API key
+  strcat(data,jsonBuffer);
+  strcat(data,"}");
+  // Close any connection before sending a new request
+  client.stop();
+  String data_length = String(strlen(data)+1); //Compute the data buffer length
+  Serial.println(data);
+  // POST data to ThingSpeak
+  if (client.connect(server, 80)) {
+    client.println("POST /channels/YOUR-CHANNEL-ID/bulk_update.json HTTP/1.1"); // Replace YOUR-CHANNEL-ID with your ThingSpeak channel ID
+    client.println("Host: api.thingspeak.com");
+    client.println("User-Agent: mw.doc.bulk-update (Arduino ESP8266)");
+    client.println("Connection: close");
+    client.println("Content-Type: application/json");
+    client.println("Content-Length: "+data_length);
+    client.println();
+    client.println(data);
+  }
+  else {
+    Serial.println("Failure: Failed to connect to ThingSpeak");
+  }
+  delay(250); //Wait to receive the response
+  client.parseFloat();
+  String resp = String(client.parseInt());
+  Serial.println("Response code:"+resp); // Print the response code. 202 indicates that the server has accepted the response
+  jsonBuffer[0] = '['; //Reinitialize the jsonBuffer for next batch of data
+  jsonBuffer[1] = '\0';
+  lastConnectionTime = millis(); //Update the last conenction time
+}*/
