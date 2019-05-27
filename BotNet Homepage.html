@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <style>
+body {
+  margin: 0;
+}
+/* Navigation bars code was from https://www.w3schools.com/css/css_navbar.asp */
+/* CSS for the leftside navigation bar */
+ul.dnLst {
+  list-style-type: none;
+  text-align: center;
+  margin-top: 110px;
+  padding: 0;
+  width: 150px;
+  background-color: #ccffcc;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+li.dnWd a.dnA {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+/* CSS used for the bottom section */ 
+ul.lftLst {
+  list-style-type: none;
+  text-align: center;
+  height: 110px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  background-color: #008000;
+  overflow: auto;
+}
+li.rtWd a.rtA {
+  display:block;
+  color: white;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 40px;
+  padding-right: 25px;
+  padding-left: 25px;
+  text-decoration: none;
+}
+li.lftWd a.lftA {
+  display: block;
+  float: left;
+  color: white;
+  text-align: center;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-decoration: none;
+}
+li a.active {
+  background-color: #194d19;
+  color: white;
+}
+li a:hover:not(.active) {
+  background-color: #003300;
+  color: white;
+}
+/* CSS used for the top navagation bar and the drop contributers section */
+ul.drp {
+  list-style-type: none;
+  text-align: center;
+  height: 110px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: fixed;
+  overflow: visible;
+  background-color: #008000;
+}
+li.drp {
+  display: block;
+  float: left;
+  color: #000;
+  padding: 0px;
+  text-decoration: none;
+}
+li a, .dropbtn {
+  display: inline-block;
+  color: #ccffcc;
+  text-align: center;
+  padding: 20px 20px;
+  text-decoration: none;
+}
+li a:hover, .dropdown:hover .dropbtn {
+  color:#ccffcc; 
+  background-color: #003300;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  color:#ccffcc;
+  background-color: #003300;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: #ccffcc;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {background-color: #b3ffb3;}
+.dropdown:hover .dropdown-content {
+  display: block;
+  color: #b3ffb3;
+}
+li.dropdown {
+  display: inline-block;
+}
+  </style>
+  <title>BotNet Homepage</title>
+
+  
+<!-- Image located at http://www.clipartable.com/images/12/Ny0Xhhgt.png -->
+  
+  <link rel="icon" href="http://www.clipartable.com/images/12/Ny0Xhhgt.png" type="image/png">
+
+</head><body>
+<!-- Top Navigation Bar -->
+<ul class="drp">
+
+<!-- BotNet Image -->
+  <li class="drp"><a style="padding: 6px 25px 0px;" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Homepage.html"><img style="height: 100px;" src="https://cdn.discordapp.com/attachments/557289109245132825/563077821900259386/BotNet_Logo_3.png" alt="BotNet Logo"></a></li>
+<!-- BotNet Title -->
+  <li class="drp" style="margin-left: 30px; margin-top: 20px; color: rgb(204, 255, 204);">
+    <h1> BotNet | Networking in Botany </h1>
+  </li>
+<!-- Contributers Dropdown Pane -->
+  <li class="dropdown" style="padding: 40px 0px 0px; float: right;"> <a href="javascript:void(0)" class="dropbtn">Contributors</a>
+    <div style="text-align: center;" class="dropdown-content"> <a href="#">Michael Sago</a> <a href="#">Cole
+Alves</a> <a href="#">Jonathan Pham</a> <a href="#">Philip
+Keroff</a> <a href="#">Tarun Vittal</a></div>
+  </li>
+</ul>
+
+<!-- Left Navigaiton Bar -->
+<ul class="dnLst">
+
+<!-- Link to the input page -->
+  <li class="dnWd"><a class="dnA" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Input.html">Input</a></li>
+<!-- Link to thingspeak -->
+  <li class="dnWd"><a class="dnA" href="https://thingspeak.com/login">See
+Graphs</a></li>
+<!-- Link to the Botnet Manuals -->
+  <li class="dnWd"><a class="dnA" href="file:///C:/Users/phili/Documents/CS4500/Group%20Project/BotNet%20Pages/BotNet%20Manuals.html">Manuals</a></li>
+</ul>
+
+<!-- Main Body of the Webpage -->
+<div style="padding: 120px 16px; margin-left: 150px; height: 300px;">
+<h2 style="font-size: 25px;"> Welcome to BotNet's interactive plant
+lab!</h2>
+<p style="font-size: 16px;">
+This website is broken into three sections: one for input, another for
+viewing the graphs, and the third one for<br>
+reading the user's and programmer's manual. These sections
+can be reached by the left hand navigation bar. <br>
+<br>
+The input page is obviously allows the user to provide input from the
+data that they measured from the <br>
+expirement. The page will ask the user to give data for the following
+sections: height, light level, soil <br>
+moisture level, temperature, and humidity level.<br>
+<br>
+The graphs section will send them to thingspeak.com where the student
+can login with their account, <br>
+locate their project, and view their graphs. <br>
+<br>
+The last page includes links to the user's manual and the programmer's
+manual. The user's manual is a guide<br>
+used by the students to set up their devices for their lab. The
+programmer's manual is a guide used<br>
+by the teachers to understand how the device works and how to fix
+problems when they arise. <br>
+<br>
+We thank you for choosing BotNet for your plant science experiment, and
+I hope you will find our services <br>
+useful and learn greatly from your experiments! <br>
+</p>
+</div>
+
+<!-- Bottom Section -->
+<ul class="lftLst" style="position: relative; background-color: rgb(204, 255, 204);">
+
+  <li class="lftWd" style="float: left;">
+    <p style="padding-left: 30px; padding-top: 10px; color: black; text-align: left;">This
+page was last
+modified on: April 2019 <br>
+Page Owner: Philip Keroff <br>
+© BotNet Inc. All rights Reserved. </p>
+  </li>
+</ul>
+
+</body></html>
